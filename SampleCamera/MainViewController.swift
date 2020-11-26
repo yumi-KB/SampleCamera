@@ -9,6 +9,12 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var photoNaviLabel: UILabel!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    // MARK: Actions
+    
     @IBAction func onCameraButtonTapped(_ sender: UIBarButtonItem) {
     
         let controller = UIAlertController(title: "", message: "どの方法で写真を読み込みますか？", preferredStyle: UIAlertController.Style.actionSheet)
@@ -18,22 +24,20 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
         controller.addAction(UIAlertAction(title: "キャンセル", style: .cancel, handler: nil))
 
-        controller.popoverPresentationController?.sourceView = self.view
-        controller.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
-        controller.popoverPresentationController?.permittedArrowDirections = []
+        if let popoverController = controller.popoverPresentationController {
+          popoverController.sourceView = self.view
+          popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+          popoverController.permittedArrowDirections = []
+        }
 
         self.present(controller, animated: true, completion: nil)
 
     }
+    
     @IBAction func onSaveButtonTapped(_ sender: UIBarButtonItem) {
     }
+    
     @IBAction func onEditButtonTapped(_ sender: UIBarButtonItem) {
-    }
-    
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
     }
     
     
@@ -77,11 +81,11 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
 
 
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    }
+//    // MARK: - Navigation
+//
+//    // In a storyboard-based application, you will often want to do a little preparation before navigation
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//    }
 
 
 }
