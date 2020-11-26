@@ -38,6 +38,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     @IBAction func onEditButtonTapped(_ sender: UIBarButtonItem) {
+        self.performSegue(withIdentifier: "MoveFilterListView", sender: nil)
     }
     
     
@@ -45,7 +46,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func selectedCamera() {
         
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+        if UIImagePickerController.isSourceTypeAvailable(/*UIImagePickerController.SourceType*/.camera) {
             let picker = UIImagePickerController()
             picker.sourceType = .camera
             picker.delegate = self
