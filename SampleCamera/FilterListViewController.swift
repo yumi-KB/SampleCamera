@@ -1,6 +1,15 @@
 import UIKit
 
+protocol FilterListViewControllerDelegate: class {
+    func filterListViewController (_ controller: FilterListViewController, didSelectFilter filter: String, index: Int)
+}
+
 class FilterListViewController: UITableViewController {
+    
+    // MARK: Properties
+    
+    weak var delegate: FilterListViewControllerDelegate? = nil
+    var selectedIndex = 0
     
     // Core Image Filter
     let filterList = ["",   // No Effect
@@ -39,10 +48,25 @@ class FilterListViewController: UITableViewController {
 
         filterListCell.textLabel?.text = filtername
         
+        // チェックをリセット
+        filterListCell.accessoryType = UITableViewCell.AccessoryType.none
+        
+        // 選択された行にチェックを表示
+        if indexPath.row == selectedIndex {
+            filterListCell.accessoryType = UITableViewCell.AccessoryType.checkmark
+        }
+        
         return filterListCell
     }
 
-
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let myDelegate = delegate {
+            myDelegate.filterListViewController(self, didSelectFilter: filterList[indexPath.row], index: indexPath.row)
+        }
+        
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

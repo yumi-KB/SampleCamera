@@ -1,9 +1,10 @@
 import UIKit
 
-class MainViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class MainViewController: UIViewController {
     
     // MARK: Properties
     
+    var selectedIndex = 0
     var photoImage: UIImage?
     
     @IBOutlet weak var photoImageView: UIImageView!
@@ -12,6 +13,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
     
     // MARK: Actions
     
@@ -41,7 +43,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         self.performSegue(withIdentifier: "MoveFilterListView", sender: nil)
     }
     
-    
+
     // MARK: Methods
     
     func selectedCamera() {
@@ -65,8 +67,30 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     
-    // MARK: Delegate Methods
-    
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        switch segue.identifier ?? "" {
+        case "MoveFilterListView":
+            if let controller = segue.destination as? FilterListViewController {
+                controller.delegate = self
+                controller.selectedIndex = selectedIndex
+            }
+            
+        default:
+            fatalError("Unexpected Segue Identifier; \(String(describing: segue.identifier))")
+            
+        }
+    }
+}
+
+
+// MARK: - UIImagePickerControllerDelegate+UINavigationControllerDelegate
+
+extension MainViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
     private func imagePickerControllerDidCancel(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
         
         if let editedImage: UIImage = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage {
@@ -80,13 +104,14 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         picker.dismiss(animated: true, completion: nil)
     }
+}
 
 
-//    // MARK: - Navigation
-//
-//    // In a storyboard-based application, you will often want to do a little preparation before navigation
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//    }
+// MARK: - FilterListViewControllerDelegate
 
-
+extension MainViewController: FilterListViewControllerDelegate {
+    
+    func filterListViewController(_ controller: FilterListViewController, didSelectFilter filter: String, index: Int) {
+        selectedIndex = index
+    }
 }
