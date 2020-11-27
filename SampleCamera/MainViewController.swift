@@ -93,9 +93,12 @@ extension MainViewController: UIImagePickerControllerDelegate, UINavigationContr
 
     private func imagePickerControllerDidCancel(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
         
+        // 新規画像を読み込み
         if let editedImage: UIImage = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage {
             photoImageView.image = editedImage
             photoImage = editedImage
+            
+            selectedIndex = 0
         }
         
         if photoImageView.image != nil {
@@ -112,6 +115,38 @@ extension MainViewController: UIImagePickerControllerDelegate, UINavigationContr
 extension MainViewController: FilterListViewControllerDelegate {
     
     func filterListViewController(_ controller: FilterListViewController, didSelectFilter filter: String, index: Int) {
+        
         selectedIndex = index
+
+        if let inputImage = photoImage {
+            let ciImage = CIImage(image: inputImage)
+
+            // エフェクトをかけない場合はオリジナルを表示
+            if filter.isEmpty {
+                selectedIndex = 0
+                photoImageView.image = photoImage
+                
+                return
+            }
+            
+            guard let effectFilter: CIFilter = CIFilter(name: filter) else {
+                return
+            }
+            
+            effectFilter.setValue(ciImage, forKey: kCIInputImageKey)
+            
+            if let filteredImage = effectFilter.outputImage {
+                let ciContext = CIContext(options: nil)
+                
+                guard let cgImage = ciContext.createCGImage(filteredImage, from: filteredImage.extent) else {
+                    return
+                }
+                
+                // 写真の向きを調整
+                let image = UIImage(cgImage: cgImage, scale: UIScreen.main.scale, orientation: inputImage.imageOrientation)
+                
+                photoImageView.image = image
+            }
+        }
     }
 }
