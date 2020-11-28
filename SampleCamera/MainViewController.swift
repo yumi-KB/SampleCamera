@@ -33,7 +33,6 @@ class MainViewController: UIViewController {
         }
 
         self.present(controller, animated: true, completion: nil)
-
     }
     
     @IBAction func onSaveButtonTapped(_ sender: UIBarButtonItem) {
@@ -127,10 +126,10 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    private func imagePickerControllerDidCancel(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         
         // 新規画像を読み込み
-        if let editedImage: UIImage = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage {
+        if let editedImage: UIImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             photoImageView.image = editedImage
             photoImage = editedImage
             
