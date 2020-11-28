@@ -37,9 +37,29 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func onSaveButtonTapped(_ sender: UIBarButtonItem) {
+        if photoImageView.image == nil {
+            let controller = UIAlertController(title: "", message: "写真が選ばれていません。まず右上のボタンから写真を読み込んでください", preferredStyle: .alert)
+            
+            controller.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil))
+            self.present(controller, animated: true, completion: nil)
+            
+            return
+        }
+        
+        if let saveImage = photoImageView.image {
+            
+            UIImageWriteToSavedPhotosAlbum(saveImage, self, #selector(self.showResultSavedImage(_: didFinishSavingWithError: contextInfo:)), nil)
+        }
     }
     
     @IBAction func onEditButtonTapped(_ sender: UIBarButtonItem) {
+        if photoImageView.image == nil {
+            let controller = UIAlertController(title: "", message: "写真が選ばれていません。まず右上のボタンから写真を読み込んでください", preferredStyle: .alert)
+            controller.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil))
+            self.present(controller, animated: true, completion: nil)
+            
+            return
+        }
         self.performSegue(withIdentifier: "MoveFilterListView", sender: nil)
     }
     
@@ -64,6 +84,22 @@ class MainViewController: UIViewController {
             picker.delegate = self
             self.present(picker, animated: true, completion: nil)
         }
+    }
+    
+    @objc func showResultSavedImage(_ image: UIImage, didFinishSavingWithError error: NSError!, contextInfo: UnsafeMutableRawPointer) {
+        
+        var title = "保存完了！"
+        var message = "カメラロールに画像を保存しました"
+        
+        if error != nil {
+            title = "エラー"
+            message = "保存に失敗しました。設定アプリでプライバシー設定を確認してください"
+        }
+        
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        controller.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil))
+        self.present(controller, animated: true, completion: nil)
     }
     
     

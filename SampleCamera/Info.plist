@@ -62,5 +62,7 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>カメラで撮影するために許可してください</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>加工した画像を保存します</string>
 </dict>
 </plist>
