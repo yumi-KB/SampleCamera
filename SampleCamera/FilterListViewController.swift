@@ -21,7 +21,7 @@ class FilterListViewController: UITableViewController {
                       "CIPhotoEffectTonal",
                       "CIPhotoEffectTransfer",
                       "CISepiaTone",
-                      "CIVignette",]
+                      "CIVignette"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +38,8 @@ class FilterListViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let filterListCell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cellIdentifier = "FilterListCell"
+        let filterListCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
 
         var filtername = filterList[indexPath.row]
         
